@@ -1,0 +1,34 @@
+{
+  "name": "hedera-evm-fuckabout",
+  "version": "0.0.1",
+  "description": "A Module for Learning Hedera-EVM",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-all" : "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harv1str/hedera-evm-fuckabout.git"
+  },
+  "keywords": [
+    "Hedera",
+    "Hedera-SDK",
+    "EVM",
+    "Ethereum",
+    "Besu"
+  ],
+  "author": "Harv1str",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harv1str/hedera-evm-fuckabout/issues"
+  },
+  "homepage": "https://github.com/harv1str/hedera-evm-fuckabout#readme",
+  "dependencies": {
+    "@hashgraph/sdk": "^2.6.0",
+    "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "tsc": "^2.0.3"
+  }
+}
