@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-all": "tsc",
     "deploy-test-greeter": "node ./src/scripts/test-contract-deployment/deployHelloWorld.js",
-    "query-test-greeter" : "node ./src/scripts/test-contract-deployment/queryHelloWorld.js"
+    "query-test-greeter" : "node ./src/scripts/test-contract-deployment/queryHelloWorld.js",
+    "deploy-test-stateful-mod": "node ./src/scripts/test-contract-deployment/deployStatefulMod.js",
+    "query-test-stateful-mod": "node ./src/scripts/test-contract-deployment/queryStatefulMod.js"
     
   },
   "repository": {
