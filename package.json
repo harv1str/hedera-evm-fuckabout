@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-all" : "tsc"
+    "build-all": "tsc",
+    "deploy-test-greeter": "node ./src/scripts/test-contract-deployment/deployHelloWorld.js",
+    "query-test-greeter" : "node ./src/scripts/test-contract-deployment/queryHelloWorld.js"
+    
   },
   "repository": {
     "type": "git",
