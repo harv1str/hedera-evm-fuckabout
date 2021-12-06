@@ -10,7 +10,8 @@
     "query-test-greeter" : "node ./src/scripts/test-contract-deployment/queryHelloWorld.js",
     "deploy-test-stateful-mod": "node ./src/scripts/test-contract-deployment/deployStatefulMod.js",
     "query-test-stateful-mod": "node ./src/scripts/test-contract-deployment/queryStatefulMod.js",
-    "deploy-test-uni_v2": "node ./src/scripts/test-contract-deployment/deployUniswapV2.js"
+    "deploy-test-uni_v2": "node ./src/scripts/test-contract-deployment/deployUniswapV2Chunked.js",
+    "deploy-factory-test" : "node ./src/scripts/test-contract-deployment/deployFactoryPattern.js"
     
   },
   "repository": {

@@ -9,6 +9,7 @@ const {
 } = require("@hashgraph/sdk");
 
 const uniswapObject = require("../contracts/uniswap_v2_pair.json");
+const FILE_PART_SIZE = 6000;
 
 async function main() {
     let client;

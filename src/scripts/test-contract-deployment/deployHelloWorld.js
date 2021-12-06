@@ -13,7 +13,7 @@ console.log("ENV: ",process.env)
 const helloWorld = require("../contracts/hello_world.json");
 
 async function main() {
-    let client;ß
+    let client;
 
     try {
         client = Client.forName(process.env.HEDERA_NETWORK).setOperator(
@@ -31,7 +31,7 @@ async function main() {
     const fileTransactionResponse = await new FileCreateTransaction()
         .setKeys([client.operatorPublicKey])
         .setContents(contractByteCode)
-        .execute(client);ß
+        .execute(client);
 
     const fileReceipt = await fileTransactionResponse.getReceipt(client);
     
