@@ -13,7 +13,8 @@
     "deploy-test-uni_v2": "node ./src/scripts/test-contract-deployment/deployUniswapV2Chunked.js",
     "deploy-factory-test" : "node ./src/scripts/test-contract-deployment/deployFactoryPattern.js",
     "deploy-test-token" : "node ./src/scripts/test-contract-deployment/deploy-erc20.js",
-    "query-test-tokens" : "node ./src/scripts/test-contract-deployment/test_token_contracts.js"
+    "query-test-tokens" : "node ./src/scripts/test-contract-deployment/test_token_contracts.js",
+    "create-pair" : "node ./src/scripts/test-contract-deployment/createPairOnUv2.js"
     
   },
   "repository": {
