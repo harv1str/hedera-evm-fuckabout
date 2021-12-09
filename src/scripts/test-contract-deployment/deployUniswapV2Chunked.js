@@ -8,10 +8,29 @@ const {
   ContractCreateTransaction,
   Hbar,
   FileAppendTransaction,
-  ContractFunctionParameters
+  ContractFunctionParameters,
+  ContractCallQuery
 } = require("@hashgraph/sdk");
 
 const uniswapObject = require("../contracts/uniswap_v2_flat.json");
+
+
+async function queryContract(_client, _contractId, _function, _args) {
+    // Illustrative example
+    const contractCall = new ContractCallQuery()
+        .setGas(75000)
+        .setContractId(_contractId)
+        .setFunction(_function)
+
+    if (_args && _args.map && _args.length && _args.length > 0) { //Ducktyping for Arrays ATM.  Switch to Typescript
+        // Do Argument version
+    }
+
+    contractCall.setQueryPayment(new Hbar(1))
+    const contractCallResp = await contractCall.execute(_client);
+
+    return contractCallResp;
+}
 
 function chunkByteStream(_byteStream){
     const FILE_PART_SIZE = 3000;
@@ -45,6 +64,46 @@ function chunkByteStream(_byteStream){
     
 }
 
+
+
+async function deployContractOnFile(_fileId, _client){
+    const fileId = _fileId; // To-Do: Validation  "0.0.16645492" 
+
+    const fee_receiver = AccountId.fromString(process.env.OPERATOR_ID).toSolidityAddress();
+
+    const contractTransactionResponse = await new ContractCreateTransaction()
+        .setConstructorParameters(
+            new ContractFunctionParameters()
+            .addAddress(fee_receiver)
+        )
+        .setGas(75000)
+        .setBytecodeFileId(fileId)
+        .setAdminKey(client.operatorPublicKey)
+        .execute(_client);
+    
+    const contractReceipt = await contractTransactionResponse.getReceipt(client);
+
+    const contractId = contractReceipt.contractId;
+    
+    const contract_info = {
+        feeReceiver: fee_receiver,
+        network: process.env.HEDERA_NETWORK,
+        contract_id: contractId.toString(),
+        contract_solidity_address: contractId.toSolidityAddress(),
+        file_id: fileId
+    }
+
+    console.log("Contract Deployed! Info:\n");
+    console.log(JSON.stringify(contract_info));
+    console.log("\n");
+
+    return contract_info;
+}
+
+/*
+    MAIN EXPERIMENTATION AREA
+*/
+
 async function main() {
     let client;
 
@@ -56,6 +115,10 @@ async function main() {
     } catch (err) {
         console.log(err);
     }
+    
+    // _client, _contractId, _function, _args
+    const queryResp = await queryContract(client, "0.0.16646217", "allPairsLength");
+    console.log(`All Pairs Length Call:`, queryResp.getUint8(0));
 
     /*
     const uniswapFactoryByteCode = chunkByteStream(uniswapObject.object);
@@ -95,10 +158,10 @@ async function main() {
     }
 
     console.log(`FILE_ID: ${fileId}`)
-    */
-    /* Now.  We create the fucking Contract, yo */
+    
+    // Actual Contract Creation
 
-    const fileId = "0.0.16645492";
+    // const fileId = "0.0.16645492";
 
     const fee_receiver = AccountId.fromString(process.env.OPERATOR_ID).toSolidityAddress();
 
@@ -129,6 +192,8 @@ async function main() {
     console.log("\n");
 
     return 0;
+    */
 }
 //{"feeReceiver":"000000000000000000000000000000000002b499","network":"testnet","contract_id":"0.0.16646217","contract_solidity_address":"0000000000000000000000000000000000fe0049","file_id":"0.0.16645492"}
 main() ;
+
