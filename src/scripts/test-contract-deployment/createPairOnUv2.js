@@ -3,7 +3,9 @@ const {
     ContractExecuteTransaction,
     AccountId,
     PrivateKey,
-    ContractFunctionParameters
+    ContractFunctionParameters,
+    ContractCallQuery,
+    Hbar
 } = require("@hashgraph/sdk");
 
 const dotenv = require('dotenv');
@@ -21,7 +23,9 @@ const TOKEN_2 = {"network":"testnet","contractId":"0.0.18355090","contractSolidi
 // OK BUT SHIT INITIALIZE NO ADDR: const UNI_CONTRACT = {"feeReceiver":"000000000000000000000000000000000002b499","network":"testnet","contract_id":"0.0.18699495","contract_solidity_address":"00000000000000000000000000000000011d54e7","file_id":"0.0.18699493"};
 // NOT OK!  TOO EXPENSIVE const UNI_CONTRACT = {"feeReceiver":"000000000000000000000000000000000002b499","network":"testnet","contract_id":"0.0.18699499","contract_solidity_address":"00000000000000000000000000000000011d54eb","file_id":"0.0.18699498"};
 
-const UNI_CONTRACT = {"feeReceiver":"000000000000000000000000000000000002b499","network":"testnet","contract_id":"0.0.18699502","contract_solidity_address":"00000000000000000000000000000000011d54ee","file_id":"0.0.18699501"};
+// OK!  No Introspection : const UNI_CONTRACT = {"feeReceiver":"000000000000000000000000000000000002b499","network":"testnet","contract_id":"0.0.18699502","contract_solidity_address":"00000000000000000000000000000000011d54ee","file_id":"0.0.18699501"};
+// NOT OKAY!  BAD SOLIDITY const UNI_CONTRACT = {"feeReceiver":"000000000000000000000000000000000002b499","network":"testnet","contract_id":"0.0.18699505","contract_solidity_address":"00000000000000000000000000000000011d54f1","file_id":"0.0.18699504"};
+const UNI_CONTRACT = {"feeReceiver":"000000000000000000000000000000000002b499","network":"testnet","contract_id":"0.0.18699514","contract_solidity_address":"00000000000000000000000000000000011d54fa","file_id":"0.0.18699513"}
 
 function createClient(_hedera_network, _operator_id, _operator_key) {
     let client;
@@ -42,7 +46,7 @@ function createClient(_hedera_network, _operator_id, _operator_key) {
 }
 
 async function main() {
-
+    
     console.log(TOKEN_1.contractSolidityAddress)
     console.log(TOKEN_2.contractSolidityAddress)
     
@@ -51,7 +55,7 @@ async function main() {
       process.env.OPERATOR_ID,
       process.env.OPERATOR_KEY
   );
-
+  
   const contractExecTransactionResponse = await new ContractExecuteTransaction()
     .setContractId(UNI_CONTRACT.contract_id)
     .setGas(1000000)
@@ -66,7 +70,10 @@ async function main() {
   console.log(contractExecTransactionResponse);
   console.log(contractExecTransactionResponse.transactionHash.toString("hex"));
   console.log(contractExecTransactionResponse.transactionId.toString());
-  console.log(contractExecTransactionResponse.fromSolidityAddress());
+  //console.log(contractExecTransactionResponse.fromSolidityAddress());
+  
+
+
 }
 
 main() 
