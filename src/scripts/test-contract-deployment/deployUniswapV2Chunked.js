@@ -12,8 +12,8 @@ const {
   ContractCallQuery
 } = require("@hashgraph/sdk");
 
-const uniswapObject = require("../contracts/uniswap_v2_flat.json");
-
+//const uniswapObject = require("../contracts/uniswap_v2_flat.json");
+const uniswapObject = require("../contracts/modifiedUniswap_variable.json");
 
 async function queryContract(_client, _contractId, _function, _args) {
     // Illustrative example
@@ -117,10 +117,10 @@ async function main() {
     }
     
     // _client, _contractId, _function, _args
-    const queryResp = await queryContract(client, "0.0.16646217", "allPairsLength");
-    console.log(`All Pairs Length Call:`, queryResp.getUint8(0));
+    //const queryResp = await queryContract(client, "0.0.16646217", "allPairsLength");
+   // console.log(`All Pairs Length Call:`, queryResp.getUint8(0));
 
-    /*
+    
     const uniswapFactoryByteCode = chunkByteStream(uniswapObject.object);
 
     
@@ -184,7 +184,7 @@ async function main() {
         network: process.env.HEDERA_NETWORK,
         contract_id: contractId.toString(),
         contract_solidity_address: contractId.toSolidityAddress(),
-        file_id: fileId
+        file_id: fileId.toString()
     }
 
     console.log("Contract Deployed! Info:\n");
@@ -192,8 +192,8 @@ async function main() {
     console.log("\n");
 
     return 0;
-    */
 }
 //{"feeReceiver":"000000000000000000000000000000000002b499","network":"testnet","contract_id":"0.0.16646217","contract_solidity_address":"0000000000000000000000000000000000fe0049","file_id":"0.0.16645492"}
+// 2: {"feeReceiver":"000000000000000000000000000000000002b499","network":"testnet","contract_id":"0.0.18699437","contract_solidity_address":"00000000000000000000000000000000011d54ad","file_id":{"shard":{"low":0,"high":0,"unsigned":false},"realm":{"low":0,"high":0,"unsigned":false},"num":{"low":18699435,"high":0,"unsigned":false},"_checksum":null}}
 main() ;
 

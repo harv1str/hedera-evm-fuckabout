@@ -10,7 +10,8 @@ interface IUniswapV2Factory {
     function allPairs(uint) external view returns (address pair);
     function allPairsLength() external view returns (uint);
 
-    function createPair(address tokenA, address tokenB) external returns (address pair);
+    // Modified
+    function createPair(address tokenA, address tokenB) external returns (address);
 
     function setFeeTo(address) external;
     function setFeeToSetter(address) external;
@@ -63,7 +64,8 @@ interface IUniswapV2Pair {
     function skim(address to) external;
     function sync() external;
 
-    function initialize(address, address) external;
+    // Initialize
+    // function initialize(address, address) external;
 }
 
 interface IUniswapV2ERC20 {
@@ -294,16 +296,19 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
     );
     event Sync(uint112 reserve0, uint112 reserve1);
 
-    constructor() public {
+    constructor(address _token0, address _token1) public {
+        // Modified
         factory = msg.sender;
-    }
-
-    // called once by the factory at time of deployment
-    function initialize(address _token0, address _token1) external {
-        require(msg.sender == factory, 'UniswapV2: FORBIDDEN'); // sufficient check
         token0 = _token0;
         token1 = _token1;
     }
+
+    // called once by the factory at time of deployment
+    // function initialize(address _token0, address _token1) external {
+    //     require(msg.sender == factory, 'UniswapV2: FORBIDDEN'); // sufficient check
+    //     token0 = _token0;
+    //     token1 = _token1;
+    // }
 
     // update reserves and, on the first call per block, price accumulators
     function _update(uint balance0, uint balance1, uint112 _reserve0, uint112 _reserve1) private {
@@ -445,9 +450,12 @@ contract UniswapV2Factory is IUniswapV2Factory {
     address public feeToSetter;
 
     mapping(address => mapping(address => address)) public getPair;
+    mapping(address => mapping(address => bool)) public pendingPairs;
+    bytes32[] public allPending;
     address[] public allPairs;
 
     event PairCreated(address indexed token0, address indexed token1, address pair, uint);
+    event PairPending(address indexed token0, address indexed token1, uint, bytes32);
 
     constructor(address _feeToSetter) public {
         feeToSetter = _feeToSetter;
@@ -457,23 +465,63 @@ contract UniswapV2Factory is IUniswapV2Factory {
         return allPairs.length;
     }
 
-    function createPair(address tokenA, address tokenB) external returns (address pair) {
+    function allPendingLength() external view returns (uint256) {
+        return allPending.length;
+    }
+
+    function isPending(address _tokenA, address _tokenB) external view returns (bool) {
+        return pendingPairs[_tokenA][_tokenB] || pendingPairs[_tokenB][_tokenA];
+    }
+
+    // Modified
+    function createPair(address tokenA, address tokenB) external returns (address pairAddr) {
         require(tokenA != tokenB, 'UniswapV2: IDENTICAL_ADDRESSES');
         (address token0, address token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
         require(token0 != address(0), 'UniswapV2: ZERO_ADDRESS');
         require(getPair[token0][token1] == address(0), 'UniswapV2: PAIR_EXISTS'); // single check is sufficient
-        bytes memory bytecode = type(UniswapV2Pair).creationCode;
-        bytes32 salt = keccak256(abi.encodePacked(token0, token1));
-        assembly {
-            pair := create2(0, add(bytecode, 32), mload(bytecode), salt)
-        }
-        IUniswapV2Pair(pair).initialize(token0, token1);
-        getPair[token0][token1] = pair;
-        getPair[token1][token0] = pair; // populate mapping in the reverse direction
-        allPairs.push(pair);
-        emit PairCreated(token0, token1, pair, allPairs.length);
-    }
 
+        pairAddr = address(new UniswapV2Pair(token0, token1));
+        //pendingPairs[token0][token1] = true;
+        //pendingPairs[token1][token0] = true;
+
+        //bytes32 id = keccak256(abi.encodePacked(token0, token1));
+        //allPending.push(id);
+        //bytes memory bytecode = type(UniswapV2Pair).creationCode;
+        //bytes32 salt = keccak256(abi.encodePacked(token0, token1));
+        // OK!
+
+        // NOT OK!
+        //assembly {
+        //    pair := create2(0, add(bytecode, 32), mload(bytecode), salt)
+        //}
+        
+        //IUniswapV2Pair(pair).initialize(token0, token1);
+
+        getPair[token0][token1] = pairAddr;
+        getPair[token1][token0] = pairAddr; // populate mapping in the reverse direction
+        allPairs.push(pairAddr);
+        //emit PairCreated(token0, token1, pair, allPairs.length);
+        
+        //emit PairPending(token0, token1, allPending.length, id, pairAddr);
+        emit PairCreated(token0, token1, pairAddr, allPairs.length);
+        return pairAddr;
+    }
+/*
+    // Modified - Novel
+    function initializePair(address tokenA, address tokenB, address _pair) public returns (bool) {
+        require(tokenA != tokenB, 'UniswapV2: IDENTICAL_ADDRESSES');
+        (address token0, address token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
+        require(token0 != address(0), 'UniswapV2: ZERO_ADDRESS');
+        //require(getPair[token0][token1] == address(0), 'UniswapV2: PAIR_EXISTS'); // single check is sufficient
+        
+        getPair[token0][token1] = _pair;
+        getPair[token1][token0] = _pair; // populate mapping in the reverse direction
+
+        allPairs.push(_pair);
+        emit PairCreated(token0, token1, _pair, allPairs.length);
+        return true;
+    }
+*/
     function setFeeTo(address _feeTo) external {
         require(msg.sender == feeToSetter, 'UniswapV2: FORBIDDEN');
         feeTo = _feeTo;
