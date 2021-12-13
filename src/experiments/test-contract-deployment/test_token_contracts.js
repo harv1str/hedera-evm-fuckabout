@@ -72,9 +72,9 @@ async function main() {
     const contractAddr = await new ContractCallQuery()
         .setGas(75000)
         .setContractId(UNI_CONTRACT.contract_id)
-        .setFunction('getPairAddress', new ContractFunctionParameters()
-          .addAddress(TOKEN_1.contractSolidityAddress)
+        .setFunction('getPair', new ContractFunctionParameters()
           .addAddress(TOKEN_2.contractSolidityAddress)
+          .addAddress(TOKEN_1.contractSolidityAddress)
         )
         .setQueryPayment(new Hbar(7))
         .execute(client);

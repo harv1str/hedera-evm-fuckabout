@@ -103,6 +103,32 @@ The core Uniswap V2 contracts consists of two primary contracts: `UniswapV2Facto
 | `UniswapV2Factory.sol` | The factory contract which has a `createPair()` call which registers and instantiates UniswapV2Pair contracts.  It acts as a 'controller' and 'factory' for the various Uniswap V2 system |
 | `UniswapV2Pair.sol` | This is the core functionality contract of the swapping mechanism for Uniswap. |
 
+#### UniswapV2Factory.sol Summary & Modifications
+
+| Function| Description | Modifications |
+| :-----: | :-----: | :-----: |
+| `feeTo() external view returns (address)` | View Function for checking out who the fee recipient is. |  |
+| `feeToSetter() external view returns (address)` | Analogous to `owner`.  This address sets the recipient fee returned by `feeTo()` |  |
+| `getPair(address tokenA, address tokenB) external view returns (address pair)` | Mapping for pairs and the address of UniswapV2Pair deployments. | None |
+| `allPairs(uint) external view returns (address pair)` | Array of pair addresses. | None  |
+| `allPairsLength() external view returns (uint)` | Returns `allPairs.length` | None |
+| `createPair(address tokenA, address tokenB) external returns (address)` | create A New Pair contract | Removed `assembly` block and `create2` usage for pre-computing contracts for compatibility. |
+| `setFeeTo(address) external` | Sets FeeTo public address variable for recipient of fees.  Can only be set by  `feeToSetter` address | None |
+| `setFeeToSetter(address) external` | Sets `feeToSetter` address variable.  Can only be set by previous `feeToSetter` address | None |
+
+#### UniswapV2Pair.sol Summary & Modifications
+
+** NOTE: This interface is rather large and shares a quite a few functions with the ERC20 interface. We will only be addressing the unique core state changing functions and adding a list for of various view functions included below the description table.  Low level function in descriptions means functions that do critical movements but without certain checks. **
+
+| Function| Description | Modifications |
+| :-----: | :-----: | :-----: |
+| `mint()` | Low level function. Mints liquidity and does checks against current liquidity and requested.  Emits Mint event. | None |
+| `burn()` | Burns Liquidity and returns pair tokens to sender if liquidity is sufficient. | None |
+| `swap()` | Swap function for exchanging tokens | None |
+| `skim()` | Uh... Forces Balances to match reserves | None |
+| `sync()` | Uh... Forces reserves to match balances | None |
+
+For Uniswap specific references for this contract checkout the [docs](https://docs.uniswap.org/protocol/V2/reference/smart-contracts/pair).
 
 ## Process - Using Hedera SDK with Solidity Contracts
 
@@ -152,9 +178,21 @@ const uniswapFactoryByteCode = chunkByteStream(uniswapObject.object);
 
 After batching the byte-stream, we return an object with necessary data for looping over the byte string array.
 
+# The Periphery
+
+Concept & Samples can be found [here](https://github.com/Uniswap/v2-periphery)
+
+As you can see above, in order to ensure backwards compatability with existing Pool contracts, we have made only minimal adjustments to implementations while keeping the interfaces for each contract the same (admittedly making certain aspects more expensive on gas).  However, due to limitations surrounding blocks and assembley calls in Hedera, certain functionalities and patterns commonly used in DeFi may not be available to developers.
 
 
+# Next Up
 
+We will need to also implement the following 2 other contracts to get a minimal contract set to run Uniswap: 
+
+* UniswapV2Router
+* UniswapV2Oracle 
+
+This Hedera ID information will be relevent up to `21 December, 2021` when the testnet on Hedera resets, we will redeploy and update this and any other relevant docs after this date.
 
 # Appendix
 ## A.1 Failed Deployments and Deployment Notes
