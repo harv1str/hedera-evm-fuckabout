@@ -13,6 +13,7 @@ Since trying to use the current rendition (as of Nov 2020) of the Javascript SDK
 | `/examples/solidity-shit` | Hedera supplied Solidity stuff |
 | `/src` | This is the source stuff for the deployer web app and sample frontend (DO NOT USE THIS IS PRODUCTION WITHOUT HEAVY MODIFICATION` |
 | `/reports`| This is an assemblage of reports written in markdown about various experiments we are running on Solidity/HederaEVM.  Accuracy and writing quality may vary. |
+| `/src/experiments` | This is the experimentation area (not maintenence or deployment or production related) where the dirty work is being done |
 
 # A Note on Versioning
 

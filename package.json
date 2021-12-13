@@ -6,15 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-all": "tsc",
-    "deploy-test-greeter": "node ./src/scripts/test-contract-deployment/deployHelloWorld.js",
-    "query-test-greeter" : "node ./src/scripts/test-contract-deployment/queryHelloWorld.js",
-    "deploy-test-stateful-mod": "node ./src/scripts/test-contract-deployment/deployStatefulMod.js",
-    "query-test-stateful-mod": "node ./src/scripts/test-contract-deployment/queryStatefulMod.js",
-    "deploy-test-uni_v2": "node ./src/scripts/test-contract-deployment/deployUniswapV2Chunked.js",
-    "deploy-factory-test" : "node ./src/scripts/test-contract-deployment/deployFactoryPattern.js",
-    "deploy-test-token" : "node ./src/scripts/test-contract-deployment/deploy-erc20.js",
-    "query-test-tokens" : "node ./src/scripts/test-contract-deployment/test_token_contracts.js",
-    "create-pair" : "node ./src/scripts/test-contract-deployment/createPairOnUv2.js"
+    "deploy-test-greeter": "node ./src/experiments/test-contract-deployment/deployHelloWorld.js",
+    "query-test-greeter" : "node ./src/experiments/test-contract-deployment/queryHelloWorld.js",
+    "deploy-test-stateful-mod": "node ./src/experiments/test-contract-deployment/deployStatefulMod.js",
+    "query-test-stateful-mod": "node ./src/experiments/test-contract-deployment/queryStatefulMod.js",
+    "deploy-test-uni_v2": "node ./src/experiments/test-contract-deployment/deployUniswapV2Chunked.js",
+    "deploy-factory-test" : "node ./src/experiments/test-contract-deployment/deployFactoryPattern.js",
+    "deploy-test-token" : "node ./src/experiments/test-contract-deployment/deploy-erc20.js",
+    "query-test-tokens" : "node ./src/experiments/test-contract-deployment/test_token_contracts.js",
+    "create-pair" : "node ./src/experiments/test-contract-deployment/createPairOnUv2.js"
     
   },
   "repository": {
